@@ -188,20 +188,24 @@ function CreateRecipeModal({ onClose, onSubmit }: CreateRecipeModalProps) {
                 onSuccess() {
                   onClose()
                 },
-                onError(error) {
-                  console.error(error)
-                },
               })
-            }, console.error)}
+            })}
             id='createRecipe'
           >
             <Stack spacing={4}>
-              {/* TODO support error for duplicate name from server */}
-              <FormControl id='name' isInvalid={!!formState.errors.name}>
+              <FormControl
+                id='name'
+                isInvalid={
+                  !!formState.errors.name || !!createRecipe.error?.response?.data?.errors?.name
+                }
+              >
                 <FormLabel>Name</FormLabel>
                 <Input type='text' {...register('name')} />
                 <FormHelperText>Give your smoothie a unique name.</FormHelperText>
-                <FormErrorMessage>{formState.errors.name?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {formState.errors.name?.message ??
+                    createRecipe.error?.response?.data?.errors?.name}
+                </FormErrorMessage>
               </FormControl>
               <Spacer my={4} />
               {ingredients.fields.map((field, index) => {
