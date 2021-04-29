@@ -1,12 +1,11 @@
-import * as mongodb from 'mongodb'
 import { createApiHandler } from 'src/createApiHandler'
 import { CreateRecipe, Recipe } from 'src/models'
-import * as db from 'src/mongodb'
+import { createRecipeForUser, findRecipesByUserEmail, isDuplicateKeyError } from 'src/mongodb'
 import { withAuth } from 'src/withAuth'
 
 const getRecipesHandler = withAuth(async (req, res, session) => {
   try {
-    const recipes = await db.findRecipesByUserEmail(session.user.email)
+    const recipes = await findRecipesByUserEmail(session.user.email)
     res.json(recipes.map((recipe) => Recipe.parse(recipe)))
   } catch (error) {
     console.error(error)
@@ -17,20 +16,17 @@ const getRecipesHandler = withAuth(async (req, res, session) => {
 const createRecipeHandler = withAuth(async (req, res, session) => {
   try {
     const body = CreateRecipe.parse(req.body)
-    const recipe = await db.createRecipeForUser(body, session.user.email)
+    const recipe = await createRecipeForUser(body, session.user.email)
     res.json(Recipe.parse(recipe))
   } catch (error) {
-    console.error(error)
-    if (error instanceof mongodb.MongoError) {
-      switch (error.code) {
-        case 11000:
-          return res.status(400).json({
-            errors: {
-              name: 'Recipe with name already exists',
-            },
-          })
-      }
+    if (isDuplicateKeyError(error)) {
+      return res.status(400).json({
+        errors: {
+          name: 'Recipe with name already exists',
+        },
+      })
     }
+    console.error(error)
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })

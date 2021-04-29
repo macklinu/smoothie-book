@@ -1,3 +1,4 @@
+import { MongoError } from 'mongodb'
 import * as mongoose from 'mongoose'
 import * as Models from 'src/models'
 
@@ -94,6 +95,19 @@ export async function findRecipeById(id: string) {
   return recipe ? recipeToApiModel(recipe) : null
 }
 
+export async function updateRecipe(id: string, body: Models.Recipe, email: string) {
+  await dbConnect()
+  return Recipe.updateOne(
+    { _id: id, userEmail: email },
+    {
+      $set: {
+        name: body.name,
+        ingredients: body.ingredients,
+      },
+    }
+  ).exec()
+}
+
 export async function createRecipeForUser(body: Models.CreateRecipe, email: string) {
   await dbConnect()
   const recipe = await Recipe.create({ ...body, userEmail: email })
@@ -111,4 +125,11 @@ function recipeToApiModel({ _id, name, ingredients }: Recipe): Models.Recipe {
     name,
     ingredients,
   }
+}
+
+export function isDuplicateKeyError(error: Error) {
+  if (error instanceof MongoError) {
+    return error.code === 11000
+  }
+  return false
 }
