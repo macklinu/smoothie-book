@@ -3,7 +3,7 @@ import { CreateRecipe, Recipe } from 'src/models'
 import { createRecipeForUser, findRecipesByUserEmail, isDuplicateKeyError } from 'src/mongodb'
 import { withAuth } from 'src/withAuth'
 
-const getRecipesHandler = withAuth(async (req, res, session) => {
+const getRecipesHandler = withAuth(async (_req, res, session) => {
   try {
     const recipes = await findRecipesByUserEmail(session.user.email)
     res.json(recipes.map((recipe) => Recipe.parse(recipe)))
