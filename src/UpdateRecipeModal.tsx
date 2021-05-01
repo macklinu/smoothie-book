@@ -64,7 +64,6 @@ export function UpdateRecipeModal({ recipe, onClose }: UpdateRecipeModalProps) {
             <Button
               type='submit'
               colorScheme='green'
-              mr={3}
               form='recipe'
               disabled={isRecipeBeingModified}
               isLoading={isRecipeBeingModified}

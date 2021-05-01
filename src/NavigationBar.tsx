@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, ButtonGroup, ButtonProps, Flex, Image, Spacer, Text } from '@chakra-ui/react'
 import { signIn, signOut } from 'next-auth/client'
 import * as React from 'react'
@@ -20,21 +19,15 @@ function HeaderLogo() {
 
 export interface NavigationBarProps {
   isLoggedIn: boolean
-  onCreateRecipeClick(): void
 }
 
-export function NavigationBar({ isLoggedIn, onCreateRecipeClick }: NavigationBarProps) {
+export function NavigationBar({ isLoggedIn }: NavigationBarProps) {
   return (
     <Box p={4} bgColor='red.100'>
       <Flex alignItems='center'>
         <HeaderLogo />
         <Spacer />
         <ButtonGroup spacing={2}>
-          {isLoggedIn ? (
-            <Button leftIcon={<AddIcon />} onClick={onCreateRecipeClick}>
-              Create Recipe
-            </Button>
-          ) : null}
           {isLoggedIn ? (
             <PrimaryButton onClick={() => signOut()}>Sign Out</PrimaryButton>
           ) : (

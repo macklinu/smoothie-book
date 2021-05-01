@@ -52,7 +52,6 @@ export function CreateRecipeModal({ onClose }: CreateRecipeModalProps) {
             <Button
               type='submit'
               colorScheme='green'
-              mr={3}
               form='createRecipe'
               isLoading={createRecipe.isLoading}
             >
