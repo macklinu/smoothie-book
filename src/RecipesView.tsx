@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, Flex, Grid, GridItem, Heading, Spacer, useDisclosure } from '@chakra-ui/react'
+import { Button, Flex, Heading, SimpleGrid, Spacer, useDisclosure } from '@chakra-ui/react'
 import * as React from 'react'
 import { useRecipes } from 'src/apiHooks'
 import { CreateRecipeModal } from 'src/CreateRecipeModal'
@@ -20,26 +20,24 @@ export function RecipesView() {
           Create Recipe
         </Button>
       </Flex>
-      <Grid templateColumns='repeat(3, 1fr)' gap={4}>
+      <SimpleGrid columns={[1, null, 3]} gap={4}>
         {recipes.isLoading ? [...Array(9)].map((_, i) => <SkeletonRecipeCard key={i} />) : null}
         {recipes.isSuccess
           ? recipes.data.map((recipe) => (
-              <GridItem>
-                <RecipeCard
-                  key={recipe.id}
-                  name={recipe.name}
-                  ingredients={recipe.ingredients}
-                  onClick={() => {
-                    setSelectedRecipe(recipe)
-                  }}
-                />
-              </GridItem>
+              <RecipeCard
+                key={recipe.id}
+                name={recipe.name}
+                ingredients={recipe.ingredients}
+                onClick={() => {
+                  setSelectedRecipe(recipe)
+                }}
+              />
             ))
           : null}
         {recipes.isSuccess && recipes.data.length === 0 ? (
           <EmptyRecipeCard onCreateClick={createRecipeModal.onOpen} />
         ) : null}
-      </Grid>
+      </SimpleGrid>
       {createRecipeModal.isOpen ? <CreateRecipeModal onClose={createRecipeModal.onClose} /> : null}
       {selectedRecipe ? (
         <UpdateRecipeModal
