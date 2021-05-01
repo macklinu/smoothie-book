@@ -2,6 +2,8 @@ import { MongoError } from 'mongodb'
 import * as mongoose from 'mongoose'
 import * as Models from 'src/models'
 
+// Modified from https://github.com/vercel/next.js/blob/v10.2.0/examples/with-mongodb-mongoose/utils/dbConnect.js
+
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections growing exponentially
