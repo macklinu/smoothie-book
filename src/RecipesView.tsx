@@ -1,20 +1,10 @@
 import { AddIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Spacer,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Button, Flex, Grid, GridItem, Heading, Spacer, useDisclosure } from '@chakra-ui/react'
 import * as React from 'react'
 import { useRecipes } from 'src/apiHooks'
 import { CreateRecipeModal } from 'src/CreateRecipeModal'
 import { Recipe } from 'src/models'
-import { RecipeCard } from 'src/RecipeCard'
+import { EmptyRecipeCard, RecipeCard, SkeletonRecipeCard } from 'src/RecipeCard'
 import { UpdateRecipeModal } from 'src/UpdateRecipeModal'
 
 export function RecipesView() {
@@ -25,12 +15,13 @@ export function RecipesView() {
     <main>
       <Flex py={4} alignItems='center'>
         <Heading>Recipes</Heading>
-        <Spacer />{' '}
+        <Spacer />
         <Button leftIcon={<AddIcon />} onClick={createRecipeModal.onOpen} colorScheme='blue'>
           Create Recipe
         </Button>
       </Flex>
       <Grid templateColumns='repeat(3, 1fr)' gap={4}>
+        {recipes.isLoading ? [...Array(9)].map((_, i) => <SkeletonRecipeCard key={i} />) : null}
         {recipes.isSuccess
           ? recipes.data.map((recipe) => (
               <GridItem>
@@ -45,22 +36,9 @@ export function RecipesView() {
               </GridItem>
             ))
           : null}
-        {/* TODO support empty state? */}
-        <GridItem>
-          <Box
-            as='button'
-            borderStyle='dashed'
-            borderWidth={4}
-            p={12}
-            width='100%'
-            onClick={createRecipeModal.onOpen}
-          >
-            <Flex direction='column' alignItems='center'>
-              <AddIcon h={8} w={8} color='gray.600' my={2} />
-              <Text>Add a New Recipe</Text>
-            </Flex>
-          </Box>
-        </GridItem>
+        {recipes.isSuccess && recipes.data.length === 0 ? (
+          <EmptyRecipeCard onCreateClick={createRecipeModal.onOpen} />
+        ) : null}
       </Grid>
       {createRecipeModal.isOpen ? <CreateRecipeModal onClose={createRecipeModal.onClose} /> : null}
       {selectedRecipe ? (
