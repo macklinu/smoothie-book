@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "type-check": "tsc",
     "toc": "doctoc README.md --maxlevel 3"
   },
