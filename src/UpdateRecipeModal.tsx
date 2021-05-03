@@ -53,6 +53,8 @@ export function UpdateRecipeModal({ recipe, onClose }: UpdateRecipeModalProps) {
                 })
               }
             }}
+            disabled={isRecipeBeingModified}
+            isLoading={isRecipeBeingModified}
           >
             Delete
           </Button>
