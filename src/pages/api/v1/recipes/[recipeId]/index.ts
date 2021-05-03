@@ -13,7 +13,7 @@ const updateRecipeHandler = withAuth(async (req, res, session) => {
     const { recipeId } = Params.parse(req.query)
     const body = Recipe.parse(req.body)
     const result = await updateRecipe(recipeId, body, session.user.email)
-    if (result.ok) {
+    if (result) {
       res.status(204).json({})
     } else {
       res.status(404).json({ error: 'Not Found' })
@@ -35,7 +35,7 @@ const deleteRecipeHandler = withAuth(async (req, res, session) => {
   try {
     const { recipeId } = Params.parse(req.query)
     const result = await deleteRecipe(recipeId, session.user.email)
-    if (result.ok) {
+    if (result) {
       res.status(204).json({})
     } else {
       res.status(404).json({ error: 'Not Found' })

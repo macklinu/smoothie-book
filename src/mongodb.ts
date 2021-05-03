@@ -105,15 +105,10 @@ export async function findRecipeById(id: string) {
 export async function updateRecipe(id: string, body: Models.Recipe, email: string) {
   await dbConnect()
   console.log('Updating recipe')
-  return Recipe.updateOne(
+  return Recipe.findOneAndUpdate(
     { _id: id, userEmail: email },
-    {
-      $set: {
-        name: body.name,
-        ingredients: body.ingredients,
-      },
-    }
-  ).exec()
+    { name: body.name, ingredients: body.ingredients }
+  )
 }
 
 export async function createRecipeForUser(body: Models.CreateRecipe, email: string) {
@@ -126,7 +121,7 @@ export async function createRecipeForUser(body: Models.CreateRecipe, email: stri
 export async function deleteRecipe(id: string, email: string) {
   await dbConnect()
   console.log('Deleting recipe')
-  return Recipe.deleteOne({ _id: id, userEmail: email }).exec()
+  return Recipe.findOneAndDelete({ _id: id, userEmail: email })
 }
 
 function recipeToApiModel({ _id, name, ingredients }: Recipe): Models.Recipe {
