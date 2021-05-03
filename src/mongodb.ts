@@ -16,15 +16,18 @@ if (!cached) {
 }
 
 async function dbConnect() {
+  console.log({ cached, globalMongoose: global.mongoose })
   if (!process.env.DATABASE_URL) {
     throw new Error('Please define the DATABASE_URL environment variable inside .env')
   }
 
   if (cached.conn) {
+    console.log('Using cached mongoose connection')
     return cached.conn
   }
 
   if (!cached.promise) {
+    console.log('Setting up mongoose connection')
     cached.promise = mongoose
       .connect(process.env.DATABASE_URL, {
         useNewUrlParser: true,
@@ -38,6 +41,7 @@ async function dbConnect() {
         return mongoose
       })
   }
+  console.log('Connecting to mongoose')
   cached.conn = await cached.promise
   return cached.conn
 }
@@ -87,6 +91,7 @@ const Recipe =
 
 export async function findRecipesByUserEmail(email: string) {
   await dbConnect()
+  console.log('Finding recipes by userEmail')
   const recipes = await Recipe.find({ userEmail: email }).exec()
   return recipes.map(recipeToApiModel)
 }
@@ -99,6 +104,7 @@ export async function findRecipeById(id: string) {
 
 export async function updateRecipe(id: string, body: Models.Recipe, email: string) {
   await dbConnect()
+  console.log('Updating recipe')
   return Recipe.updateOne(
     { _id: id, userEmail: email },
     {
@@ -112,12 +118,14 @@ export async function updateRecipe(id: string, body: Models.Recipe, email: strin
 
 export async function createRecipeForUser(body: Models.CreateRecipe, email: string) {
   await dbConnect()
+  console.log('Creating recipe')
   const recipe = await Recipe.create({ ...body, userEmail: email })
   return recipeToApiModel(recipe)
 }
 
 export async function deleteRecipe(id: string, email: string) {
   await dbConnect()
+  console.log('Deleting recipe')
   return Recipe.deleteOne({ _id: id, userEmail: email }).exec()
 }
 
