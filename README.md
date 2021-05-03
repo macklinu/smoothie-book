@@ -1,6 +1,6 @@
 # Smoothie Book
 
-> A simple online smoothie recipe book - [smoothie-book.vercel.app](https://smoothie-book.vercel.app/)
+> A simple online smoothie recipe book - [smoothie-book.herokuapp.com](https://smoothie-book.herokuapp.com/)
 
 **Table of Contents**
 
@@ -21,7 +21,7 @@
 
 ## Overview
 
-This is a [Next.js](https://nextjs.org/) application deployed to [Vercel](https://vercel.com/), utilizing Next.js' API routes to interface with [MongoDB](https://www.mongodb.com/) for creating, reading, updating, and deleting smoothie recipes. User authentication is powered by [NextAuth.js](https://next-auth.js.org/) so that users may sign in and create their own recipes and access them across multiple browsers.
+This is a [Next.js](https://nextjs.org/) application deployed to [Heroku](https://dashboard.heroku.com/), utilizing Next.js' API routes to interface with [MongoDB](https://www.mongodb.com/) for creating, reading, updating, and deleting smoothie recipes. User authentication is powered by [NextAuth.js](https://next-auth.js.org/) so that users may sign in and create their own recipes and access them across multiple browsers.
 
 ### Libraries
 
@@ -36,7 +36,7 @@ In addition to these technologies, the following libraries are also used in this
 
 ### CI/CD
 
-Upon a push or pull request to the `main` branch, a CI script powered by [GitHub Actions](https://github.com/features/actions) is run that ensures the TypeScript code compiles without errors. In addition, Vercel separately builds the app, and, when successfully built, deploys an application preview (on pull requests) or the production application (when code is pushed to the `main` branch).
+Upon a push or pull request to the `main` branch, a CI script powered by [GitHub Actions](https://github.com/features/actions) is run that ensures the TypeScript code compiles without errors. In addition, Heroku continuously deploys the app from the `main` branch upon a green CI build.
 
 ## Getting Started
 
